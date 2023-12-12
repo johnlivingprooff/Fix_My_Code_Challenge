@@ -10,7 +10,7 @@ class User():
     """
     User class:
     - id: public string unique (uuid)
-    - password: private string hash in MD5
+    - password: private string hash in SHA-256
     """
 
     __password = None
@@ -18,7 +18,7 @@ class User():
     def __init__(self):
         """
         Initialize a new user:
-        - assigned an unique `id`
+        - assigned a unique `id`
         """
         self.id = str(uuid.uuid4())
 
@@ -27,7 +27,7 @@ class User():
         """
         Password getter
         """
-        return self.__password
+        return User.__password
 
     @password.setter
     def password(self, pwd):
@@ -35,12 +35,12 @@ class User():
         Password setter:
         - `None` if `pwd` is `None`
         - `None` if `pwd` is not a string
-        - Hash `pwd` in MD5 before assign to `__password`
+        - Hash `pwd` in SHA-256 before assigning to `__password`
         """
-        if pwd is None or type(pwd) is not str:
+        if pwd is None or not isinstance(pwd, str):
             self.__password = None
         else:
-            self._password = hashlib.md5(pwd.encode()).hexdigest().lower()
+            self.__password = hashlib.sha256(pwd.encode()).hexdigest()
 
     def is_valid_password(self, pwd):
         """
@@ -48,18 +48,17 @@ class User():
         - `False` if `pwd` is `None`
         - `False` if `pwd` is not a string
         - `False` if `__password` is `None`
-        - Compare `__password` and the MD5 value of `pwd`
+        - Compare `__password` and the SHA-256 value of `pwd`
         """
-        if pwd is None or type(pwd) is not str:
+        if pwd is None or not isinstance(pwd, str):
             return False
         if self.__password is None:
             return False
-        return hashlib.md5(pwd.encode()).hexdigest().upper() == self.__password
+        return hashlib.sha256(pwd.encode()).hexdigest().upper() == self.__password
 
 
 if __name__ == '__main__':
     print("Test User")
-
     user_1 = User()
     if user_1.id is None:
         print("New User should have an id")
