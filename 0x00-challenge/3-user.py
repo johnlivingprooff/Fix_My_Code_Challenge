@@ -27,7 +27,7 @@ class User():
         """
         Password getter
         """
-        return User.__password
+        return self.__password
 
     @password.setter
     def password(self, pwd):
